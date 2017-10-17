@@ -3,37 +3,6 @@ Lesson 6: Problem Set: Working with Two Variables
 Josh Goldberg
 October 15, 2017
 
-#### *Load Libraries*
-
-``` r
-library(ggplot2)
-library(dplyr)
-```
-
-    ## Warning: package 'dplyr' was built under R version 3.4.2
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
-library(gridExtra)
-```
-
-    ## 
-    ## Attaching package: 'gridExtra'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     combine
-
 #### **1. Price vs. Length**
 
 In this problem set, you'll continue to explore the diamonds data set. Your first task is to create a scatterplot of price vs x using the ggplot syntax.
@@ -46,7 +15,7 @@ ggplot(aes(x = x, y = price), data = diamonds) +
   ggtitle("Diamond Price vs. Length", subtitle = "Positive Exponential Relationship; Some Outliers")
 ```
 
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-2-1.png)
+![](Figs/Price_vs_Length_Scatterplot-1.png)
 
 #### **2. Findings**
 
@@ -120,7 +89,7 @@ ggplot(aes(x = depth, y = price), data = diamonds) +
   scale_x_continuous(breaks = seq(50, 80, 2))
 ```
 
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-4-1.png)
+![](Figs/Adjustment_Price_vs_Depth_Scatterplot-1.png)
 
 #### **5. Typical Depth Range**
 
@@ -158,9 +127,7 @@ ggplot(aes(x = carat, y = price), data = diamonds) +
   ylim(0, quantile(diamonds$price, 0.99))
 ```
 
-    ## Warning: Removed 926 rows containing missing values (geom_point).
-
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png)
+![](Figs/Price_vs_Carat_Scatterplot-1.png)
 
 #### **9. Price vs. Volume**
 
@@ -176,7 +143,7 @@ ggplot(aes(x = volume, y = price), data = diamonds) +
   ggtitle("Diamond Price vs. Volume")
 ```
 
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
+![](Figs/Price_vs_Volume_Scatterplot-1.png)
 
 #### **10. Findings - Price vs. Volume**
 
@@ -217,7 +184,7 @@ ggplot(aes(x = volume, y = price),
   geom_smooth(method = "lm")
 ```
 
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
+![](Figs/Adjustments_Price_vs_Volume-1.png)
 
 ##### *12.1 Reflect*
 
@@ -287,7 +254,7 @@ plot2 <- ggplot(aes(x = color, y = mean_price, fill = color), data = diamonds_mp
 grid.arrange(plot1, plot2, nrow = 1)
 ```
 
-![](Problem_Set_Two_Variables_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
+![](Figs/Mean_Price_Bar_Charts-1.png)
 
 ##### *14.1 Findings*
 

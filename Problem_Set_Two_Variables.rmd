@@ -5,9 +5,9 @@ date: "October 15, 2017"
 output: github_document
 ---
 
-#### *Load Libraries*
-```{r}
-
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      warning=FALSE, message=FALSE)
 library(ggplot2)
 library(dplyr)
 library(gridExtra)
@@ -17,7 +17,7 @@ library(gridExtra)
 #### **1. Price vs. Length**
 In this problem set, you'll continue to explore the diamonds data set. Your first task is to create a scatterplot of price vs x using the ggplot syntax.
 
-```{r}
+```{r Price_vs_Length_Scatterplot}
 ggplot(aes(x = x, y = price), data = diamonds) +
   geom_point() +
   xlab("Length in mm (0–10.74)") +
@@ -33,7 +33,7 @@ What are your observations about the scatterplot of price vs. x? There is an exp
 What is the correlation between price and x (length), price and y (width), price and z (depth in mm, which is different than total depth percentage)? Round to two decimals.
 
 
-```{r}
+```{r Correlation_x_y_z}
 # Price vs. x
 cor.test(diamonds$price, diamonds$x)
 
@@ -48,7 +48,7 @@ cor.test(diamonds$price, diamonds$z)
 #### **4. Adjustments - Price vs. Depth**
 Create a simple scatter plot of price vs depth.
 
-```{r}
+```{r Adjustment_Price_vs_Depth_Scatterplot}
 ggplot(aes(x = depth, y = price), data = diamonds) +
   geom_point(alpha = 1/100) +
   xlab("Total Depth Percentage = z / mean(x, y) = 2 * z / (x + y) (43–79)") +
@@ -62,7 +62,7 @@ ggplot(aes(x = depth, y = price), data = diamonds) +
 Based on the scatterplot of price vs. depth, most diamonds are between what values of depth? 59-64.
 
 #### **6. Correlation - Price vs. Depth**
-```{r}
+```{r Correlation_Price_vs_Depth}
 # What's the correlation of price vs. total depth percentage?
 cor.test(diamonds$price, diamonds$depth)
 
@@ -73,7 +73,7 @@ Based on the correlation coefficient would you use depth to predict the price of
 #### **8. Price vs. Carat**
 Create a scatterplot of price vs carat and omit the top 1% of price and carat values.
 
-```{r}
+```{r Price_vs_Carat_Scatterplot}
 ggplot(aes(x = carat, y = price), data = diamonds) +
   geom_point() +
   xlim(0, quantile(diamonds$carat, 0.99)) +
@@ -84,7 +84,7 @@ ggplot(aes(x = carat, y = price), data = diamonds) +
 #### **9. Price vs. Volume**
 Create a scatterplot of price vs. volume (x * y * z). This is a very rough approximation for a diamond's volume. Create a new variable for volume in the diamonds data frame. This will be useful in a later exercise. Don't make any adjustments to the plot just yet.
 
-```{r}
+```{r Price_vs_Volume_Scatterplot}
 diamonds$volume <- with(diamonds, x * y * z)
 
 ggplot(aes(x = volume, y = price), data = diamonds) +
@@ -101,7 +101,7 @@ What are your observations from the price versus volume plot? There appears to e
 #### **11. Correlations on Subsets**
 
 
-```{r}
+```{r Correlation_Price_vs_Volume}
 #What's the correlation of price and volume? Exclude diamonds that have a volume of 0 or that are greater than or equal to 800. Round to two decimals.
 
 with(subset(diamonds, volume > 0 & volume < 800), 
@@ -112,7 +112,7 @@ with(subset(diamonds, volume > 0 & volume < 800),
 #### **12. Adjustments - Price vs. Volume**
 Subset the data to exclude diamonds with a volume greater than or equal to 800. Also, exclude diamonds with a volume of 0. Adjust the transparency of the points and add a linear model to the plot. (See the Instructor Notes or look up the documentation of geom_smooth() for more details about smoothers. We encourage you to think about this next question and to post your thoughts in the discussion section. 
 
-```{r}
+```{r Adjustments_Price_vs_Volume}
 ggplot(aes(x = volume, y = price), 
        data = subset(diamonds, volume > 0 & volume < 800)) +
   xlab("Volume") +
@@ -139,7 +139,7 @@ The data frame should contain the following variables in this order:
 
 where n is the number of diamonds in each level of clarity.
 
-```{r}
+```{r Subset_Clarity}
 diamondsByClarity <- diamonds %>%
   group_by(clarity) %>%
   summarise(mean_price = mean(price),
@@ -156,7 +156,7 @@ We’ve created summary data frames with the mean price by clarity and color. Yo
 
 Your task is to write additional code to create two bar plots on one output image using the grid.arrange() function from the package gridExtra.
 
-```{r}
+```{r Mean_Price_Bar_Charts}
 diamonds_mp_by_clarity <- diamonds %>%
   group_by(clarity) %>%
   summarise(mean_price = mean(price)) %>%
