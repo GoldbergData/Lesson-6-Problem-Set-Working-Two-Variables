@@ -62,8 +62,9 @@ ggplot(aes(x = depth, y = price), data = diamonds) +
 Based on the scatterplot of price vs. depth, most diamonds are between what values of depth? 59-64.
 
 #### **6. Correlation - Price vs. Depth**
+What's the correlation of price vs. total depth percentage?
+
 ```{r Correlation_Price_vs_Depth}
-# What's the correlation of price vs. total depth percentage?
 cor.test(diamonds$price, diamonds$depth)
 
 ```
@@ -99,11 +100,9 @@ ggplot(aes(x = volume, y = price), data = diamonds) +
 What are your observations from the price versus volume plot? There appears to essentially be no relationship. The data is stacked in a small range with some outliers. 
 
 #### **11. Correlations on Subsets**
-
+What's the correlation of price and volume? Exclude diamonds that have a volume of 0 or that are greater than or equal to 800. Round to two decimals.
 
 ```{r Correlation_Price_vs_Volume}
-#What's the correlation of price and volume? Exclude diamonds that have a volume of 0 or that are greater than or equal to 800. Round to two decimals.
-
 with(subset(diamonds, volume > 0 & volume < 800), 
             cor.test(price, volume))
 
