@@ -1,4 +1,4 @@
-### Udacity problem set from Data Analyst Nanodegree
+### Udacity Data Analyst Nanodegree
 *Lesson-6-Problem-Set-Working-Two-Variables*
 
 ##### Usage
