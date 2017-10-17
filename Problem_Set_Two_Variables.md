@@ -97,8 +97,9 @@ Based on the scatterplot of price vs. depth, most diamonds are between what valu
 
 #### **6. Correlation - Price vs. Depth**
 
+What's the correlation of price vs. total depth percentage?
+
 ``` r
-# What's the correlation of price vs. total depth percentage?
 cor.test(diamonds$price, diamonds$depth)
 ```
 
@@ -151,9 +152,9 @@ What are your observations from the price versus volume plot? There appears to e
 
 #### **11. Correlations on Subsets**
 
-``` r
-#What's the correlation of price and volume? Exclude diamonds that have a volume of 0 or that are greater than or equal to 800. Round to two decimals.
+What's the correlation of price and volume? Exclude diamonds that have a volume of 0 or that are greater than or equal to 800. Round to two decimals.
 
+``` r
 with(subset(diamonds, volume > 0 & volume < 800), 
             cor.test(price, volume))
 ```
