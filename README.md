@@ -1,5 +1,5 @@
 ### Udacity Data Analyst Nanodegree
-*Lesson-6-Problem-Set-Working-Two-Variables*
+*Lesson 6: Problem Set Working with Two Variables*
 
 ##### Usage
 The content is viewable in the .md file.
