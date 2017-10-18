@@ -187,7 +187,7 @@ ggplot(aes(x = volume, y = price),
 
 ![](Figs/Adjustments_Price_vs_Volume-1.png)
 
-###### *12.1 Reflect*
+##### *12.1 Reflect*
 
 Do you think this would be a useful model to estimate the price of diamonds? Why or why not? There seems to be a strong positive relationship between price and volume once outliers are excluded. But why are such outliers in existence? The answer could be telling of further details. Nonetheless, the majority of observations fall within a particularly linear ban of values based on price and volume. This essentially indicates that the bigger a diamond, the more expensive it costs, generally speaking. But there are clearly exceptions in the scatterplot to this rule. There may be a better alternative for predicting diamond prices.
 
@@ -257,11 +257,11 @@ grid.arrange(plot1, plot2, nrow = 1)
 
 ![](Figs/Mean_Price_Bar_Charts-1.png)
 
-##### *15. Findings*
+#### **15. Findings**
 
 What do you notice in each of the bar charts for mean price by clarity and mean price by color? Mean price by clarity seems inconsistent with intuition; the better clarity diamonds have a lower mean price. Moreover, S12 has a spike in average price. Color holds the same pattern of inverse relationship between quality and price.
 
-##### *16. Gapminder Revisited*
+#### **16. Gapminder Revisited**
 
 The Gapminder website contains over 500 data sets with information about the world's population. Your task is to continue the investigation you did at the end of Problem Set 3 or you can start fresh and choose a different data set from Gapminder.
 
@@ -273,7 +273,7 @@ You can find a link to the Gapminder website in the Instructor Notes.
 
 Once you've completed your investigation, create a post in the discussions that includes: 1. the variable(s) you investigated, your observations, and any summary statistics 2. snippets of code that created the plots 3. links to the images of your plots
 
-###### *16.1 Download and Read Data*
+##### *16.1 Download and Read Data*
 
 ``` r
 # Download data from http://www.gapminder.org/data/
@@ -395,7 +395,7 @@ head(HIVdeaths)
     ## #   `2004` <dbl>, `2005` <dbl>, `2006` <dbl>, `2007` <dbl>, `2008` <dbl>,
     ## #   `2009` <dbl>, `2010` <dbl>, `2011` <dbl>
 
-###### *16.2 Clean Data*
+##### *16.2 Clean Data*
 
 ``` r
 # Unload dplyr to avoid conflict
@@ -478,7 +478,7 @@ HIVdf <- HIVdf %>%
   subset(complete.cases(Estimated_Prevalence))
 ```
 
-###### *16.3 Explore Data*
+##### *16.3 Explore Data*
 
 ``` r
 # Descriptive Statistics
