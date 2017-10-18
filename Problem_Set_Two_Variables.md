@@ -187,7 +187,7 @@ ggplot(aes(x = volume, y = price),
 
 ![](Figs/Adjustments_Price_vs_Volume-1.png)
 
-##### *12.1 Reflect*
+###### *12.1 Reflect*
 
 Do you think this would be a useful model to estimate the price of diamonds? Why or why not? There seems to be a strong positive relationship between price and volume once outliers are excluded. But why are such outliers in existence? The answer could be telling of further details. Nonetheless, the majority of observations fall within a particularly linear ban of values based on price and volume. This essentially indicates that the bigger a diamond, the more expensive it costs, generally speaking. But there are clearly exceptions in the scatterplot to this rule. There may be a better alternative for predicting diamond prices.
 
@@ -257,6 +257,257 @@ grid.arrange(plot1, plot2, nrow = 1)
 
 ![](Figs/Mean_Price_Bar_Charts-1.png)
 
-##### *14.1 Findings*
+##### *15. Findings*
 
 What do you notice in each of the bar charts for mean price by clarity and mean price by color? Mean price by clarity seems inconsistent with intuition; the better clarity diamonds have a lower mean price. Moreover, S12 has a spike in average price. Color holds the same pattern of inverse relationship between quality and price.
+
+##### *16. Gapminder Revisited*
+
+The Gapminder website contains over 500 data sets with information about the world's population. Your task is to continue the investigation you did at the end of Problem Set 3 or you can start fresh and choose a different data set from Gapminder.
+
+If you’re feeling adventurous or want to try some data munging see if you can find a data set or scrape one from the web.
+
+In your investigation, examine pairs of variable and create 2-5 plots that make use of the techniques from Lesson 4.
+
+You can find a link to the Gapminder website in the Instructor Notes.
+
+Once you've completed your investigation, create a post in the discussions that includes: 1. the variable(s) you investigated, your observations, and any summary statistics 2. snippets of code that created the plots 3. links to the images of your plots
+
+###### *16.1 Download and Read Data*
+
+``` r
+# Download data from http://www.gapminder.org/data/
+
+download.file('http://docs.google.com/spreadsheet/pub?key=pyj6tScZqmEfbZyl0qjbiRQ&output=xlsx', destfile = 'HIVprevalence.xlsx')
+
+download.file('http://docs.google.com/spreadsheet/pub?key=0ArfEDsV3bBwCdHZJdFBhYVlvck43d1R6ZFYzUWpiLWc&output=xlsx', destfile = 'AnnualHIVdeaths.xlsx')
+
+# Read data
+HIVprev <- read_excel('HIVprevalence.xlsx')
+HIVdeaths <- read_excel('AnnualHIVdeaths.xlsx')
+
+# View structure and head
+str(HIVprev)
+```
+
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    275 obs. of  34 variables:
+    ##  $ Estimated HIV Prevalence% - (Ages 15-49): chr  "Abkhazia" "Afghanistan" "Akrotiri and Dhekelia" "Albania" ...
+    ##  $ 1979.0                                  : num  NA NA NA NA NA ...
+    ##  $ 1980.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1981.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1982.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1983.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1984.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1985.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1986.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1987.0                                  : num  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ 1988.0                                  : logi  NA NA NA NA NA NA ...
+    ##  $ 1989.0                                  : logi  NA NA NA NA NA NA ...
+    ##  $ 1990.0                                  : num  NA NA NA NA 0.06 NA NA 0.5 NA NA ...
+    ##  $ 1991.0                                  : num  NA NA NA NA 0.06 NA NA 0.8 NA NA ...
+    ##  $ 1992.0                                  : num  NA NA NA NA 0.06 NA NA 1 NA NA ...
+    ##  $ 1993.0                                  : num  NA NA NA NA 0.06 NA NA 1.2 NA NA ...
+    ##  $ 1994.0                                  : num  NA NA NA NA 0.06 NA NA 1.4 NA NA ...
+    ##  $ 1995.0                                  : num  NA NA NA NA 0.06 NA NA 1.6 NA NA ...
+    ##  $ 1996.0                                  : num  NA NA NA NA 0.06 NA NA 1.7 NA NA ...
+    ##  $ 1997.0                                  : num  NA NA NA NA 0.06 NA NA 1.8 NA NA ...
+    ##  $ 1998.0                                  : num  NA NA NA NA 0.06 NA NA 1.8 NA NA ...
+    ##  $ 1999.0                                  : num  NA NA NA NA 0.06 NA NA 1.9 NA NA ...
+    ##  $ 2000.0                                  : num  NA NA NA NA 0.06 NA NA 1.9 NA NA ...
+    ##  $ 2001.0                                  : num  NA NA NA NA 0.06 NA NA 1.9 NA NA ...
+    ##  $ 2002.0                                  : num  NA NA NA NA 0.06 NA NA 1.9 NA NA ...
+    ##  $ 2003.0                                  : num  NA NA NA NA 0.06 NA NA 1.9 NA NA ...
+    ##  $ 2004.0                                  : num  NA NA NA NA 0.1 NA NA 1.9 NA NA ...
+    ##  $ 2005.0                                  : num  NA NA NA NA 0.1 NA NA 1.9 NA NA ...
+    ##  $ 2006.0                                  : num  NA NA NA NA 0.1 NA NA 1.9 NA NA ...
+    ##  $ 2007.0                                  : num  NA NA NA NA 0.1 NA NA 1.9 NA NA ...
+    ##  $ 2008.0                                  : num  NA NA NA NA 0.1 NA NA 2 NA NA ...
+    ##  $ 2009                                    : chr  NA "0.06" NA NA ...
+    ##  $ 2010                                    : chr  NA "0.06" NA NA ...
+    ##  $ 2011                                    : chr  NA "0.06" NA NA ...
+
+``` r
+head(HIVprev)
+```
+
+    ## # A tibble: 6 x 34
+    ##   `Estimated HIV Prevalence% - (Ages 15-49)` `1979.0` `1980.0` `1981.0`
+    ##                                        <chr>    <dbl>    <dbl>    <dbl>
+    ## 1                                   Abkhazia       NA       NA       NA
+    ## 2                                Afghanistan       NA       NA       NA
+    ## 3                      Akrotiri and Dhekelia       NA       NA       NA
+    ## 4                                    Albania       NA       NA       NA
+    ## 5                                    Algeria       NA       NA       NA
+    ## 6                             American Samoa       NA       NA       NA
+    ## # ... with 30 more variables: `1982.0` <dbl>, `1983.0` <dbl>,
+    ## #   `1984.0` <dbl>, `1985.0` <dbl>, `1986.0` <dbl>, `1987.0` <dbl>,
+    ## #   `1988.0` <lgl>, `1989.0` <lgl>, `1990.0` <dbl>, `1991.0` <dbl>,
+    ## #   `1992.0` <dbl>, `1993.0` <dbl>, `1994.0` <dbl>, `1995.0` <dbl>,
+    ## #   `1996.0` <dbl>, `1997.0` <dbl>, `1998.0` <dbl>, `1999.0` <dbl>,
+    ## #   `2000.0` <dbl>, `2001.0` <dbl>, `2002.0` <dbl>, `2003.0` <dbl>,
+    ## #   `2004.0` <dbl>, `2005.0` <dbl>, `2006.0` <dbl>, `2007.0` <dbl>,
+    ## #   `2008.0` <dbl>, `2009` <chr>, `2010` <chr>, `2011` <chr>
+
+``` r
+str(HIVdeaths)
+```
+
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    269 obs. of  23 variables:
+    ##  $ Annual number of AIDS deaths: chr  "Abkhazia" "Afghanistan" "Akrotiri and Dhekelia" "Albania" ...
+    ##  $ 1990                        : num  NA 60 NA NA 60 NA NA 600 NA NA ...
+    ##  $ 1991                        : num  NA 60 NA NA 60 NA NA 1200 NA NA ...
+    ##  $ 1992                        : num  NA 60 NA NA 60 NA NA 1800 NA NA ...
+    ##  $ 1993                        : num  NA 60 NA NA 60 NA NA 2500 NA NA ...
+    ##  $ 1994                        : num  NA 60 NA NA 60 NA NA 3300 NA NA ...
+    ##  $ 1995                        : num  NA 150 NA NA 60 NA NA 4300 NA NA ...
+    ##  $ 1996                        : num  NA 150 NA NA 60 NA NA 5300 NA NA ...
+    ##  $ 1997                        : num  NA 150 NA NA 60 NA NA 6300 NA NA ...
+    ##  $ 1998                        : num  NA 150 NA NA 120 NA NA 7300 NA NA ...
+    ##  $ 1999                        : num  NA 150 NA NA 120 NA NA 8200 NA NA ...
+    ##  $ 2000                        : num  NA 150 NA NA 120 NA NA 9200 NA NA ...
+    ##  $ 2001                        : num  NA 150 NA NA 300 NA NA 10000 NA NA ...
+    ##  $ 2002                        : num  NA 150 NA NA 300 NA NA 11000 NA NA ...
+    ##  $ 2003                        : num  NA 150 NA NA 300 NA NA 12000 NA NA ...
+    ##  $ 2004                        : num  NA 350 NA NA 300 NA NA 12000 NA NA ...
+    ##  $ 2005                        : num  NA 350 NA NA 600 NA NA 13000 NA NA ...
+    ##  $ 2006                        : num  NA 350 NA NA 600 NA NA 13000 NA NA ...
+    ##  $ 2007                        : num  NA 350 NA NA 600 NA NA 13000 NA NA ...
+    ##  $ 2008                        : num  NA 350 NA NA 600 NA NA 12000 NA NA ...
+    ##  $ 2009                        : num  NA 350 NA NA 600 NA NA 11000 NA NA ...
+    ##  $ 2010                        : num  NA 350 NA NA NA NA NA NA NA NA ...
+    ##  $ 2011                        : num  NA 350 NA NA NA NA NA NA NA NA ...
+
+``` r
+head(HIVdeaths)
+```
+
+    ## # A tibble: 6 x 23
+    ##   `Annual number of AIDS deaths` `1990` `1991` `1992` `1993` `1994` `1995`
+    ##                            <chr>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ## 1                       Abkhazia     NA     NA     NA     NA     NA     NA
+    ## 2                    Afghanistan     60     60     60     60     60    150
+    ## 3          Akrotiri and Dhekelia     NA     NA     NA     NA     NA     NA
+    ## 4                        Albania     NA     NA     NA     NA     NA     NA
+    ## 5                        Algeria     60     60     60     60     60     60
+    ## 6                 American Samoa     NA     NA     NA     NA     NA     NA
+    ## # ... with 16 more variables: `1996` <dbl>, `1997` <dbl>, `1998` <dbl>,
+    ## #   `1999` <dbl>, `2000` <dbl>, `2001` <dbl>, `2002` <dbl>, `2003` <dbl>,
+    ## #   `2004` <dbl>, `2005` <dbl>, `2006` <dbl>, `2007` <dbl>, `2008` <dbl>,
+    ## #   `2009` <dbl>, `2010` <dbl>, `2011` <dbl>
+
+###### *16.2 Clean Data*
+
+``` r
+# Unload dplyr to avoid conflict
+detach("package:dplyr", unload = TRUE)
+
+# Rename country column
+HIVprev <- rename(HIVprev, c('Estimated HIV Prevalence% - (Ages 15-49)' = 'Country'))
+HIVdeaths <- rename(HIVdeaths, c('Annual number of AIDS deaths' = 'Country'))
+
+# Reload dplyr
+library(dplyr)
+
+# Make tables narrow
+HIVprev <- gather(HIVprev, "Year", "Estimated_Prevalence", -Country)
+HIVdeaths <- gather(HIVdeaths, "Year", "Annual_Deaths", -Country)
+
+# Subset data to excluded zeros and NA's
+HIVprev_excludeZero <- HIVprev %>%
+  subset(Estimated_Prevalence > 0) %>%
+  subset(complete.cases(Estimated_Prevalence))
+HIVdeaths_excludeZero <- subset(HIVdeaths, Annual_Deaths > 0)
+
+# Change type after conversion to numeric
+HIVprev_excludeZero$Year <- as.numeric(HIVprev_excludeZero$Year)
+HIVprev_excludeZero$Estimated_Prevalence <- as.numeric(HIVprev_excludeZero$Estimated_Prevalence)
+HIVdeaths_excludeZero$Year <- as.numeric(HIVdeaths_excludeZero$Year)
+
+# Revisit structure and head
+str(HIVprev_excludeZero)
+```
+
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    3301 obs. of  3 variables:
+    ##  $ Country             : chr  "Angola" "Argentina" "Bahamas" "Barbados" ...
+    ##  $ Year                : num  1979 1979 1979 1979 1979 ...
+    ##  $ Estimated_Prevalence: num  0.0265 0.0205 0.01 0.0277 0.106 ...
+
+``` r
+head(HIVprev_excludeZero)
+```
+
+    ## # A tibble: 6 x 3
+    ##     Country  Year Estimated_Prevalence
+    ##       <chr> <dbl>                <dbl>
+    ## 1    Angola  1979           0.02652787
+    ## 2 Argentina  1979           0.02050798
+    ## 3   Bahamas  1979           0.01000000
+    ## 4  Barbados  1979           0.02767648
+    ## 5  Botswana  1979           0.10597605
+    ## 6    Brazil  1979           0.09447913
+
+``` r
+str(HIVdeaths_excludeZero)
+```
+
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    3132 obs. of  3 variables:
+    ##  $ Country      : chr  "Afghanistan" "Algeria" "Angola" "Argentina" ...
+    ##  $ Year         : num  1990 1990 1990 1990 1990 1990 1990 1990 1990 1990 ...
+    ##  $ Annual_Deaths: num  60 60 600 3000 60 350 60 60 350 60 ...
+
+``` r
+head(HIVdeaths_excludeZero)
+```
+
+    ## # A tibble: 6 x 3
+    ##       Country  Year Annual_Deaths
+    ##         <chr> <dbl>         <dbl>
+    ## 1 Afghanistan  1990            60
+    ## 2     Algeria  1990            60
+    ## 3      Angola  1990           600
+    ## 4   Argentina  1990          3000
+    ## 5     Armenia  1990            60
+    ## 6   Australia  1990           350
+
+``` r
+# Left join HIVprev into HIVdeaths
+HIVdf <- left_join(HIVdeaths_excludeZero, HIVprev_excludeZero, by = c("Country", "Year"))
+
+# Remove rows with no HIVprev (NA's)
+HIVdf <- HIVdf %>%
+  subset(complete.cases(Estimated_Prevalence))
+```
+
+###### *16.3 Explore Data*
+
+``` r
+# Descriptive Statistics
+summary(HIVdf)
+```
+
+    ##    Country               Year      Annual_Deaths    Estimated_Prevalence
+    ##  Length:3048        Min.   :1990   Min.   :    60   Min.   : 0.060      
+    ##  Class :character   1st Qu.:1995   1st Qu.:    60   1st Qu.: 0.100      
+    ##  Mode  :character   Median :2000   Median :   350   Median : 0.300      
+    ##                     Mean   :2000   Mean   :  9267   Mean   : 1.792      
+    ##                     3rd Qu.:2005   3rd Qu.:  3900   3rd Qu.: 1.200      
+    ##                     Max.   :2011   Max.   :390000   Max.   :26.500
+
+``` r
+cor(HIVdf$Annual_Deaths, HIVdf$Estimated_Prevalence)
+```
+
+    ## [1] 0.4775045
+
+``` r
+# Scatterplot
+ggplot(aes(x = Estimated_Prevalence, y = Annual_Deaths), data = HIVdf) +
+  xlab("HIV Estimated Prevalence, Ages 15-49") +
+  ylab("Annual HIV Deaths All Ages") +
+  ggtitle("HIV Annual Deaths vs. Estimated Prevalence") +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  coord_trans(x = 'log10', y = 'log10')
+```
+
+![](Figs/Explore%20Gapminder-1.png)

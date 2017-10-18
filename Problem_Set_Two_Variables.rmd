@@ -9,8 +9,11 @@ output: github_document
 knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
                       warning=FALSE, message=FALSE)
 library(ggplot2)
-library(dplyr)
 library(gridExtra)
+library(readxl)
+library(tidyr)
+library(plyr)
+library(dplyr)
 
 ```
 
@@ -189,7 +192,101 @@ grid.arrange(plot1, plot2, nrow = 1)
 
 ```
 
-##### *14.1 Findings*
+#### **15. Findings**
 What do you notice in each of the bar charts for mean price by clarity and mean price by color? Mean price by clarity seems inconsistent with intuition; the better clarity diamonds have a lower mean price. Moreover, S12 has a spike in average price. Color holds the same pattern of inverse relationship between quality and price.
+
+#### **16. Gapminder Revisited**
+The Gapminder website contains over 500 data sets with information about the world's population. Your task is to continue the investigation you did at the end of Problem Set 3 or you can start fresh and choose a different data set from Gapminder.
+
+If you’re feeling adventurous or want to try some data munging see if you can find a data set or scrape one from the web.
+
+In your investigation, examine pairs of variable and create 2-5 plots that make use of the techniques from Lesson 4.
+
+You can find a link to the Gapminder website in the Instructor Notes.
+
+Once you've completed your investigation, create a post in the discussions that includes:
+       1. the variable(s) you investigated, your observations, and any summary statistics
+       2. snippets of code that created the plots
+       3. links to the images of your plots
+
+##### *16.1 Download and Read Data*
+```{r Download Gapminder Data}
+# Download data from http://www.gapminder.org/data/
+
+download.file('http://docs.google.com/spreadsheet/pub?key=pyj6tScZqmEfbZyl0qjbiRQ&output=xlsx', destfile = 'HIVprevalence.xlsx')
+
+download.file('http://docs.google.com/spreadsheet/pub?key=0ArfEDsV3bBwCdHZJdFBhYVlvck43d1R6ZFYzUWpiLWc&output=xlsx', destfile = 'AnnualHIVdeaths.xlsx')
+
+# Read data
+HIVprev <- read_excel('HIVprevalence.xlsx')
+HIVdeaths <- read_excel('AnnualHIVdeaths.xlsx')
+
+# View structure and head
+str(HIVprev)
+head(HIVprev)
+str(HIVdeaths)
+head(HIVdeaths)
+
+```
+
+##### *16.2 Clean Data*
+```{r Clean Gapminder Data}
+# Unload dplyr to avoid conflict
+detach("package:dplyr", unload = TRUE)
+
+# Rename country column
+HIVprev <- rename(HIVprev, c('Estimated HIV Prevalence% - (Ages 15-49)' = 'Country'))
+HIVdeaths <- rename(HIVdeaths, c('Annual number of AIDS deaths' = 'Country'))
+
+# Reload dplyr
+library(dplyr)
+
+# Make tables narrow
+HIVprev <- gather(HIVprev, "Year", "Estimated_Prevalence", -Country)
+HIVdeaths <- gather(HIVdeaths, "Year", "Annual_Deaths", -Country)
+
+# Subset data to excluded zeros and NA's
+HIVprev_excludeZero <- HIVprev %>%
+  subset(Estimated_Prevalence > 0) %>%
+  subset(complete.cases(Estimated_Prevalence))
+HIVdeaths_excludeZero <- subset(HIVdeaths, Annual_Deaths > 0)
+
+# Change type after conversion to numeric
+HIVprev_excludeZero$Year <- as.numeric(HIVprev_excludeZero$Year)
+HIVprev_excludeZero$Estimated_Prevalence <- as.numeric(HIVprev_excludeZero$Estimated_Prevalence)
+HIVdeaths_excludeZero$Year <- as.numeric(HIVdeaths_excludeZero$Year)
+
+# Revisit structure and head
+str(HIVprev_excludeZero)
+head(HIVprev_excludeZero)
+str(HIVdeaths_excludeZero)
+head(HIVdeaths_excludeZero)
+
+# Left join HIVprev into HIVdeaths
+HIVdf <- left_join(HIVdeaths_excludeZero, HIVprev_excludeZero, by = c("Country", "Year"))
+
+# Remove rows with no HIVprev (NA's)
+HIVdf <- HIVdf %>%
+  subset(complete.cases(Estimated_Prevalence))
+
+```
+
+##### *16.3 Explore Data*
+```{r Explore Gapminder}
+# Descriptive Statistics
+summary(HIVdf)
+cor(HIVdf$Annual_Deaths, HIVdf$Estimated_Prevalence)
+
+# Scatterplot
+ggplot(aes(x = Estimated_Prevalence, y = Annual_Deaths), data = HIVdf) +
+  xlab("HIV Estimated Prevalence, Ages 15-49") +
+  ylab("Annual HIV Deaths All Ages") +
+  ggtitle("HIV Annual Deaths vs. Estimated Prevalence") +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  coord_trans(x = 'log10', y = 'log10')
+
+```
+
 
 
