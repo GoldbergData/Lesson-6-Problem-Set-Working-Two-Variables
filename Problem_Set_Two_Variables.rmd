@@ -268,16 +268,15 @@ HIVdf <- HIVdf %>%
 
 ###### *16.3 Explore Data*
 ```{r Explore Gapminder}
+# Descriptive Statistics
 summary(HIVdf)
+cor(HIVdf$Annual_Deaths, HIVdf$Estimated_Prevalence)
 
+# Scatterplot
 ggplot(aes(x = Estimated_Prevalence, y = Annual_Deaths), data = HIVdf) +
   geom_point() +
   geom_smooth(method = 'lm') +
   coord_trans(x = 'log10', y = 'log10')
-
-ggplot(aes(x = Annual_Deaths, fill = factor(Country)), data = HIVdf) +
-  geom_histogram(color = '#666666') +
-  facet_wrap(~Country)
 
 ```
 
