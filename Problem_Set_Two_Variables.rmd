@@ -276,11 +276,8 @@ ggplot(aes(x = Estimated_Prevalence, y = Annual_Deaths), data = HIVdf) +
   coord_trans(x = 'log10', y = 'log10')
 
 ggplot(aes(x = Annual_Deaths, fill = factor(Country)), data = HIVdf) +
-  #xlab("Color: from J (worst) to D (best)") +
-  #ylab("Average Price in US Dollars ($326 - $18,823)") +
-  #ggtitle("Average Diamond Price vs. Color") +
-  geom_histogram(colour = "white", stat = "identity") +
-  guides(fill = FALSE)
+  geom_histogram(color = '#666666') +
+  facet_wrap(~Country)
 
 ```
 
