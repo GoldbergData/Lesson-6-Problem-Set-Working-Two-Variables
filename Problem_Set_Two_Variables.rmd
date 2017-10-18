@@ -189,7 +189,28 @@ grid.arrange(plot1, plot2, nrow = 1)
 
 ```
 
-##### *14.1 Findings*
+##### *15. Findings*
 What do you notice in each of the bar charts for mean price by clarity and mean price by color? Mean price by clarity seems inconsistent with intuition; the better clarity diamonds have a lower mean price. Moreover, S12 has a spike in average price. Color holds the same pattern of inverse relationship between quality and price.
+
+##### *16. Gapminder Revisited*
+The Gapminder website contains over 500 data sets with information about the world's population. Your task is to continue the investigation you did at the end of Problem Set 3 or you can start fresh and choose a different data set from Gapminder.
+
+If you’re feeling adventurous or want to try some data munging see if you can find a data set or scrape one from the web.
+
+In your investigation, examine pairs of variable and create 2-5 plots that make use of the techniques from Lesson 4.
+
+You can find a link to the Gapminder website in the Instructor Notes.
+
+Once you've completed your investigation, create a post in the discussions that includes:
+       1. the variable(s) you investigated, your observations, and any summary statistics
+       2. snippets of code that created the plots
+       3. links to the images of your plots
+       
+```{r Gapminder Data}
+
+
+
+```
+
 
 
