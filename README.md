@@ -7,3 +7,5 @@ R code is in the .rdm file.
 
 ##### Data
 pseudo_facebook.tsv
+AnnualHIVDeasths.xlsx
+HIVprevalence.xlsx
