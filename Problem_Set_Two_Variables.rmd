@@ -12,8 +12,8 @@ library(ggplot2)
 library(gridExtra)
 library(readxl)
 library(tidyr)
-library(dplyr)
 library(plyr)
+library(dplyr)
 
 ```
 
@@ -125,7 +125,7 @@ ggplot(aes(x = volume, y = price),
 
 ```
 
-##### *12.1 Reflect*
+###### *12.1 Reflect*
 Do you think this would be a useful model to estimate the price of diamonds? Why or why not? There seems to be a strong positive relationship between price and volume once outliers are excluded. But why are such outliers in existence? The answer could be telling of further details. Nonetheless, the majority of observations fall within a particularly linear ban of values based on price and volume. This essentially indicates that the bigger a diamond, the more expensive it costs, generally speaking. But there are clearly exceptions in the scatterplot to this rule. There may be a better alternative for predicting diamond prices. 
 
 #### **13. Mean Price by Clarity**
@@ -231,24 +231,19 @@ head(HIVdeaths)
 
 ###### *16.2 Clean Data*
 ```{r Clean Gapminder Data}
+# Unload dplyr to avoid conflict
+detach("package:dplyr", unload = TRUE)
+
 # Rename country column
 HIVprev <- rename(HIVprev, c('Estimated HIV Prevalence% - (Ages 15-49)' = 'Country'))
 HIVdeaths <- rename(HIVdeaths, c('Annual number of AIDS deaths' = 'Country'))
 
+# Reload dplyr
+library(dplyr)
+
 # Make tables narrow
 HIVprev <- gather(HIVprev, "Year", "Estimated_Prevalence", -Country)
 HIVdeaths <- gather(HIVdeaths, "Year", "Annual_Deaths", -Country)
-
-# Change type after conversion to numeric
-HIVprev_excludeZero$Year <- as.numeric(HIVprev_excludeZero$Year)
-HIVprev_excludeZero$Estimated_Prevalence <- as.numeric(HIVprev_excludeZero$Estimated_Prevalence)
-HIVdeaths_excludeZero$Year <- as.numeric(HIVdeaths_excludeZero$Year)
-
-# Revisit structure and head
-str(HIVprev)
-head(HIVprev)
-str(HIVdeaths)
-head(HIVdeaths)
 
 # Subset data to excluded zeros and NA's
 HIVprev_excludeZero <- HIVprev %>%
@@ -256,6 +251,16 @@ HIVprev_excludeZero <- HIVprev %>%
   subset(complete.cases(Estimated_Prevalence))
 HIVdeaths_excludeZero <- subset(HIVdeaths, Annual_Deaths > 0)
 
+# Change type after conversion to numeric
+HIVprev_excludeZero$Year <- as.numeric(HIVprev_excludeZero$Year)
+HIVprev_excludeZero$Estimated_Prevalence <- as.numeric(HIVprev_excludeZero$Estimated_Prevalence)
+HIVdeaths_excludeZero$Year <- as.numeric(HIVdeaths_excludeZero$Year)
+
+# Revisit structure and head
+str(HIVprev_excludeZero)
+head(HIVprev_excludeZero)
+str(HIVdeaths_excludeZero)
+head(HIVdeaths_excludeZero)
 
 # Left join HIVprev into HIVdeaths
 HIVdf <- left_join(HIVdeaths_excludeZero, HIVprev_excludeZero, by = c("Country", "Year"))
@@ -274,6 +279,9 @@ cor(HIVdf$Annual_Deaths, HIVdf$Estimated_Prevalence)
 
 # Scatterplot
 ggplot(aes(x = Estimated_Prevalence, y = Annual_Deaths), data = HIVdf) +
+  xlab("HIV Estimated Prevalence, Ages 15-49") +
+  ylab("Annual HIV Deaths All Ages") +
+  ggtitle("HIV Annual Deaths vs. Estimated Prevalence") +
   geom_point() +
   geom_smooth(method = 'lm') +
   coord_trans(x = 'log10', y = 'log10')
